@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>디자인 요청 현황 리포트 (7/28–9/29)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F6F5; --surface:#FFFFFF; --ink:#16201B; --muted:#5A6760; --line:#DDE3E0;
+  --h0:#EDF1EF; --h1:#CDE7D9; --h2:#8FCAAB; --h3:#3E9A6C; --h4:#0B5E3E;
+  --accent:#0B6E4F; --onheat:#fff; --warn:#B4461B; --warnbg:#FBEDE6;
+  --r-miyeon:#0B6E4F; --r-seoyeon:#3B6FD4; --r-hyejeong:#C4762B; --r-hwiryang:#8A5CC2; --r-bonbu:#C2415C; --r-juseong:#5F7A87;
+  color-scheme:light;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#101512; --surface:#171E1A; --ink:#E6ECE8; --muted:#98A69E; --line:#2A342F;
+  --h0:#1C2520; --h1:#1E4433; --h2:#2A6E4E; --h3:#3FA474; --h4:#8FE0B5;
+  --accent:#5CC796; --onheat:#0c1a13; --warn:#F08A5D; --warnbg:#3A2219;
+  --r-miyeon:#5CC796; --r-seoyeon:#7EA6F2; --r-hyejeong:#E8A45F; --r-hwiryang:#B795E6; --r-bonbu:#EC7F95; --r-juseong:#9DB4BF;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#101512; --surface:#171E1A; --ink:#E6ECE8; --muted:#98A69E; --line:#2A342F;
+  --h0:#1C2520; --h1:#1E4433; --h2:#2A6E4E; --h3:#3FA474; --h4:#8FE0B5;
+  --accent:#5CC796; --onheat:#0c1a13; --warn:#F08A5D; --warnbg:#3A2219;
+  --r-miyeon:#5CC796; --r-seoyeon:#7EA6F2; --r-hyejeong:#E8A45F; --r-hwiryang:#B795E6; --r-bonbu:#EC7F95; --r-juseong:#9DB4BF;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+main{max-width:1080px;margin:0 auto;padding:40px 20px 80px}
+h1{font-size:clamp(26px,4vw,36px);line-height:1.2;margin:0 0 8px;font-weight:700;letter-spacing:-.02em}
+h2{font-size:20px;margin:0 0 4px;font-weight:700;letter-spacing:-.01em}
+.sub{color:var(--muted);margin:0}
+.lede{max-width:70ch;margin:20px 0 0;font-size:16px}
+section{margin-top:44px}
+.sechead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.sechead p{margin:0;color:var(--muted);font-size:14px;max-width:62ch}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-top:28px;border-top:2px solid var(--ink)}
+.fact{padding:14px 16px 4px 0}
+.fact b{display:block;font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.fact span{color:var(--muted);font-size:13.5px}
+@media (max-width:720px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* calendar */
+.calwrap{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px}
+@media (max-width:860px){.calwrap{grid-template-columns:1fr}}
+.months{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:560px){.months{grid-template-columns:1fr}}
+.month h3{font-size:14px;margin:0 0 8px;font-weight:600}
+.dow,.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.dow span{font-size:11px;color:var(--muted);text-align:center}
+.day{aspect-ratio:1;border-radius:4px;background:var(--h0);border:0;padding:0;font:inherit;font-size:11px;color:var(--muted);cursor:default;position:relative}
+.day.out{background:transparent}
+.day[data-n]{cursor:pointer;color:var(--ink);font-weight:600}
+.day.l1{background:var(--h1)}.day.l2{background:var(--h2)}.day.l3{background:var(--h3);color:var(--onheat)}.day.l4{background:var(--h4);color:var(--onheat)}
+.day.sel{outline:2px solid var(--ink);outline-offset:1px}
+.day:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.legend{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-top:14px;flex-wrap:wrap}
+.legend i{width:14px;height:14px;border-radius:3px;display:inline-block}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;padding:6px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.daylist h3{font-size:15px;margin:0 0 10px}
+.daylist ul{list-style:none;margin:0;padding:0}
+.daylist li{padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.daylist li small{display:block;color:var(--muted);font-size:12.5px}
+.empty{color:var(--muted);font-size:14px}
+.who{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+
+/* charts */
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+svg text{fill:var(--muted);font-family:inherit}
+.bars{display:grid;gap:9px}
+.bar{display:grid;grid-template-columns:92px minmax(0,1fr) 34px;align-items:center;gap:10px;font-size:13.5px}
+.bar .track{height:14px;background:var(--h0);border-radius:3px;overflow:hidden;display:flex}
+.bar .track i{display:block;height:100%}
+.bar b{font-weight:600;text-align:right}
+.keys{display:flex;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--muted);margin-top:12px}
+.panel h3{font-size:15px;margin:0 0 14px;font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12.5px;white-space:nowrap}
+td.num,th.num{text-align:right;white-space:nowrap}
+.scroll{overflow-x:auto}
+.tag{display:inline-block;font-size:12px;padding:1px 7px;border-radius:99px;background:var(--h0);color:var(--muted);white-space:nowrap}
+.tag.late{background:var(--warnbg);color:var(--warn)}
+.tag.open{background:var(--ink);color:var(--surface)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.filters button{border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:13px;padding:4px 11px;border-radius:99px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+
+.findings{display:grid;gap:0;counter-reset:f}
+.finding{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:20px;padding:18px 0;border-top:1px solid var(--line)}
+.finding h3{font-size:16px;margin:0;font-weight:700;line-height:1.4}
+.finding p{margin:0;max-width:68ch}
+@media (max-width:640px){.finding{grid-template-columns:1fr;gap:6px}}
+.note{font-size:13px;color:var(--muted);margin-top:36px;max-width:78ch}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>디자인 요청 현황 리포트</h1>
+    <p class="sub">2026년 7월 28일 ~ 9월 29일, 슬랙 ‘디자인 요청 리스트’ 52건 기준</p>
+    <p class="lede">9주 동안 6명이 디자이너 1명(수연님)에게 52건을 요청했습니다. 43건 중 34건(79%)이 요청한 완료일 안에 전달됐고, 전달의 절반 가까이는 요청 당일에 나갔습니다. 다만 요청이 특정 날짜에 몰리고, 당일 마감 요청이 4건 중 1건꼴이며, 대형 요청이 1건으로 등록돼 실제 작업량이 건수에 드러나지 않는 구조입니다.</p>
+    <div class="facts">
+      <div class="fact"><b>52건</b><span>9주간 요청, 주 평균 5.8건</span></div>
+      <div class="fact"><b>6 → 1</b><span>요청자 6명, 디자이너 1명</span></div>
+      <div class="fact"><b>13건</b><span>요청일 = 완료요청일 (당일 마감)</span></div>
+      <div class="fact"><b>5건</b><span>진행 중 (12개 제품 요청 포함)</span></div>
+    </div>
+  </header>
+
+  <section aria-labelledby="cal-h">
+    <div class="sechead">
+      <div><h2 id="cal-h">업무 캘린더</h2><p>날짜를 누르면 그날의 요청 목록이 나옵니다. ‘전달일’은 스레드에서 수연님이 파일을 올린 날짜입니다.</p></div>
+      <div class="seg" role="group" aria-label="캘린더 기준">
+        <button type="button" data-mode="req" aria-pressed="true">요청일</button>
+        <button type="button" data-mode="due" aria-pressed="false">완료요청일</button>
+        <button type="button" data-mode="first" aria-pressed="false">전달일</button>
+      </div>
+    </div>
+    <div class="calwrap">
+      <div class="panel">
+        <div class="months" id="months"></div>
+        <div class="legend" aria-hidden="true">적음 <i style="background:var(--h1)"></i><i style="background:var(--h2)"></i><i style="background:var(--h3)"></i><i style="background:var(--h4)"></i> 많음 (하루 1 / 2 / 3–4 / 5건 이상)</div>
+      </div>
+      <div class="panel daylist" id="daylist" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="wk-h">
+    <div class="sechead"><div><h2 id="wk-h">주별 요청량과 요청자</h2><p>첫 주 14건에는 리스트 개설 시점에 한꺼번에 등록된 요청이 섞여 있을 수 있습니다.</p></div></div>
+    <div class="panel"><div id="weekly" class="scroll"></div><div class="keys" id="rkeys"></div></div>
+  </section>
+
+  <section aria-labelledby="mix-h">
+    <div class="sechead"><div><h2 id="mix-h">누가, 어떤 브랜드의, 어떤 작업을</h2><p>요청자 표의 ‘평균 기간’은 요청하면서 준 작업 기간(완료요청일 − 요청일)의 평균입니다. 막대 색은 요청자입니다.</p></div></div>
+    <div class="two">
+      <div class="panel"><h3>요청자별 건수</h3><div class="scroll"><table id="reqtable"></table></div></div>
+      <div class="panel"><h3>브랜드별 건수</h3><div class="bars" id="brands"></div></div>
+      <div class="panel"><h3>작업 유형별 건수</h3><div class="bars" id="kinds"></div></div>
+      <div class="panel"><h3>요청 후 전달까지 걸린 기간</h3><div id="ta"></div><p class="sub" style="font-size:13px;margin-top:10px">전달 기록이 스레드에 남은 44건 기준. 7일 이상은 대부분 패키지·인쇄물처럼 칼선이나 추가 설명을 기다린 건입니다.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="late-h">
+    <div class="sechead"><div><h2 id="late-h">완료요청일을 넘긴 9건</h2><p>지연 대부분은 디자인 작업 시간보다 요청자 쪽 입력(칼선, 문구, 설명)을 기다린 시간에서 생겼습니다.</p></div></div>
+    <div class="panel scroll"><table id="late"></table></div>
+  </section>
+
+  <section aria-labelledby="open-h">
+    <div class="sechead"><div><h2 id="open-h">진행 중인 5건</h2><p>‘포우팝/아로사 12개 제품’은 리스트상 1건이지만, 배너와 상세페이지를 12개 제품분 만드는 작업입니다.</p></div></div>
+    <div class="panel scroll"><table id="open"></table></div>
+  </section>
+
+  <section aria-labelledby="fd-h">
+    <div class="sechead"><div><h2 id="fd-h">정리하면</h2></div></div>
+    <div class="findings">
+      <div class="finding"><h3>요청은 몰려서 들어옵니다</h3><p>8월 21일 하루에만 7건(쿠이시 쿠팡 등록 5건 포함)이 들어왔고, 7월 28~30일에도 매일 4건씩 쌓였습니다. 반대로 8월 7~12일, 9월 둘째 주는 거의 비어 있습니다. 채널 등록 일정이 정해지는 시점에 한꺼번에 몰리는 패턴이라, 등록 일정을 미리 공유받으면 분산이 가능합니다.</p></div>
+      <div class="finding"><h3>당일 마감이 4건 중 1건</h3><p>완료요청일이 요청일과 같은 건이 13건(25%)입니다. 혜정님 요청 10건 중 7건, 서연님 요청 14건 중 5건이 당일 마감이었습니다. 대부분 소규모 썸네일·수정 작업이라 실제로 당일 처리됐지만, 이런 건이 같은 날 겹치면 다른 요청이 밀립니다.</p></div>
+      <div class="finding"><h3>건수와 작업량이 다릅니다</h3><p>썸네일 문구 한 줄 수정과 패키지 칼선 디자인, 12개 제품 상세페이지가 모두 ‘1건’입니다. 업무 분담을 판단하려면 건수보다 작업 규모를 나눠 봐야 하고, 대형 요청은 제품 단위로 쪼개 등록하는 편이 진척 관리에도 유리합니다.</p></div>
+      <div class="finding"><h3>지연은 입력 대기에서 생깁니다</h3><p>늦어진 9건 중 폼보드·타공판 DP는 칼선을 받은 당일 바로 전달됐고, 야아부르니·두부모래 패키지는 사전 설명과 칼선 확정이 필요한 작업이었습니다. 요청 시 사이즈, 문구, 칼선, 참고 이미지를 함께 올리는 것만으로 대기 시간을 줄일 수 있습니다. 현재 가이드 파일이 첨부된 요청은 52건 중 25건입니다.</p></div>
+      <div class="finding"><h3>우선순위를 정하는 사람이 없습니다</h3><p>리스트의 담당자·기한 칸은 비어 있고, 우선순위는 디자이너가 요청 건마다 대표님께 확인하는 방식으로 정해지고 있습니다. 또 디자인 외 업무(패키지 발주·입금 요청 등)도 이 리스트를 통해 함께 처리되고 있습니다.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="all-h">
+    <div class="sechead"><div><h2 id="all-h">전체 요청 목록</h2></div></div>
+    <div class="filters" id="filters" role="group" aria-label="요청자 필터"></div>
+    <div class="panel scroll"><table id="all"></table></div>
+  </section>
+
+  <p class="note">집계 기준: 요청일은 리스트의 ‘요청일자’ 칸(비어 있으면 등록일), 전달일은 스레드에서 디자이너가 “올려뒀습니다/전달드렸어요” 등으로 파일을 올린 첫 날짜입니다. 스레드에 전달 기록이 없는 8건은 기간 집계에서 제외했습니다. 브랜드와 작업 유형은 요청 제목을 기준으로 분류했습니다.</p>
+</main>
+
+<script>
+const ROWS = [{"name": "마르티그 룸스프레이 상세페이지 추가", "req": "2026-07-28", "due": "2026-08-03", "first": "2026-08-04", "requester": "미연", "brand": "마르티그", "kind": "상세페이지", "done": true, "uploads": 1, "msgs": 1, "guide": 2, "note": ""}, {"name": "마르티그 송풍구 썸네일 변경", "req": "2026-07-28", "due": "2026-07-29", "first": null, "requester": "미연", "brand": "마르티그", "kind": "썸네일·대표이미지", "done": true, "uploads": 0, "msgs": 2, "guide": 0, "note": ""}, {"name": "마르티그 스마트스토어 번들상품 썸네일", "req": "2026-07-28", "due": "2026-07-29", "first": "2026-07-29", "requester": "미연", "brand": "마르티그", "kind": "썸네일·대표이미지", "done": true, "uploads": 1, "msgs": 1, "guide": 0, "note": ""}, {"name": "베트리온 기관지 배너", "req": "2026-07-28", "due": "2026-07-29", "first": "2026-07-29", "requester": "서연", "brand": "베트리온", "kind": "배너", "done": true, "uploads": 2, "msgs": 3, "guide": 1, "note": ""}, {"name": "네모네 폼보드", "req": "2026-07-29", "due": "2026-08-05", "first": "2026-08-18", "requester": "미연", "brand": "오프라인 DP", "kind": "패키지·인쇄물", "done": true, "uploads": 2, "msgs": 4, "guide": 0, "note": "칼선 수령(8/18) 당일 전달"}, {"name": "쿠이시 생일포스터 4개입 세트 4종 상세페이지, 썸네일", "req": "2026-07-29", "due": "2026-07-30", "first": "2026-07-29", "requester": "혜정", "brand": "쿠이시", "kind": "상세페이지", "done": true, "uploads": 1, "msgs": 2, "guide": 0, "note": ""}, {"name": "마르티그 SNS(댓글이벤트)", "req": "2026-07-29", "due": "2026-07-31", "first": "2026-07-30", "requester": "미연", "brand": "마르티그", "kind": "SNS·이벤트", "done": true, "uploads": 1, "msgs": 1, "guide": 1, "note": ""}, {"name": "붐붐포 찹찹츄 체험단 모집 이미지 (insta)", "req": "2026-07-29", "due": "2026-07-31", "first": "2026-07-30", "requester": "휘량", "brand": "붐붐포", "kind": "SNS·이벤트", "done": true, "uploads": 1, "msgs": 1, "guide": 0, "note": ""}, {"name": "쿠이시 초커세트", "req": "2026-07-30", "due": "2026-07-30", "first": "2026-07-30", "requester": "혜정", "brand": "쿠이시", "kind": "썸네일·대표이미지", "done": true, "uploads": 2, "msgs": 4, "guide": 0, "note": ""}, {"name": "생일포스터 4개입 세트 개별 이미지 (추가 썸네일용)", "req": "2026-07-30", "due": "2026-07-30", "first": "2026-07-30", "requester": "혜정", "brand": "쿠이시", "kind": "썸네일·대표이미지", "done": true, "uploads": 1, "msgs": 3, "guide": 0, "note": ""}, {"name": "미미파티 집게핀 990원 톡톡 메세지", "req": "2026-07-30", "due": "2026-07-30", "first": "2026-07-30", "requester": "휘량", "brand": "미미파티", "kind": "공지·팝업·메시지", "done": true, "uploads": 1, "msgs": 5, "guide": 1, "note": ""}, {"name": "사바나 배송 공지", "req": "2026-07-30", "due": "2026-07-31", "first": "2026-07-30", "requester": "미연", "brand": "사바나", "kind": "공지·팝업·메시지", "done": true, "uploads": 1, "msgs": 3, "guide": 1, "note": ""}, {"name": "마르티그 테라코타 모든 향 2개입 구성 썸네일", "req": "2026-07-31", "due": "2026-07-31", "first": "2026-07-31", "requester": "혜정", "brand": "마르티그", "kind": "썸네일·대표이미지", "done": true, "uploads": 1, "msgs": 2, "guide": 0, "note": ""}, {"name": "붐붐포 스마트스토어 배너+안내 이미지", "req": "2026-07-31", "due": "2026-08-04", "first": null, "requester": "휘량", "brand": "붐붐포", "kind": "배너", "done": true, "uploads": 0, "msgs": 4, "guide": 1, "note": ""}, {"name": "마르티그 테라코타 모든 향 3개입 구성 썸네일", "req": "2026-08-05", "due": "2026-08-06", "first": "2026-08-05", "requester": "혜정", "brand": "마르티그", "kind": "썸네일·대표이미지", "done": true, "uploads": 1, "msgs": 3, "guide": 0, "note": ""}, {"name": "네이버 상품 썸네일, 상세페이지 수정", "req": "2026-08-05", "due": "2026-08-06", "first": "2026-08-06", "requester": "미연", "brand": "마르티그", "kind": "상세페이지", "done": true, "uploads": 1, "msgs": 2, "guide": 1, "note": ""}, {"name": "마르티그 테라코타 서브이미지 해상도 개선, 노이즈 제거", "req": "2026-08-06", "due": "2026-08-06", "first": "2026-08-06", "requester": "혜정", "brand": "마르티그", "kind": "썸네일·대표이미지", "done": true, "uploads": 2, "msgs": 7, "guide": 2, "note": ""}, {"name": "마르티그 자사몰 샤쉐, 테라코타 2+1 상페 상단", "req": "2026-08-06", "due": "2026-08-07", "first": "2026-08-06", "requester": "휘량", "brand": "마르티그", "kind": "상세페이지", "done": true, "uploads": 2, "msgs": 6, "guide": 1, "note": ""}, {"name": "베트리온 눈 쿠팡 상단 할인 배너", "req": "2026-08-13", "due": "2026-08-18", "first": "2026-08-14", "requester": "서연", "brand": "베트리온", "kind": "배너", "done": true, "uploads": 1, "msgs": 2, "guide": 0, "note": ""}, {"name": "수납장 4종 상세 및 포우팝 장난감 2종 상세", "req": "2026-08-14", "due": "2026-08-21", "first": "2026-09-01", "requester": "주성", "brand": "포우팝·아로사", "kind": "상세페이지", "done": true, "uploads": 2, "msgs": 4, "guide": 0, "note": "6개 제품 분량, 검토 후 수정 반영"}, {"name": "마르티그 샤쉐 모든 향 2개입 구성 대표이미지, 서브이미지", "req": "2026-08-14", "due": "2026-08-19", "first": "2026-08-18", "requester": "혜정", "brand": "마르티그", "kind": "썸네일·대표이미지", "done": true, "uploads": 1, "msgs": 4, "guide": 0, "note": ""}, {"name": "마르티그 블라인드 테스트 모집 인스타", "req": "2026-08-20", "due": "2026-08-21", "first": "2026-08-21", "requester": "미연", "brand": "마르티그", "kind": "SNS·이벤트", "done": true, "uploads": 1, "msgs": 1, "guide": 1, "note": ""}, {"name": "궁팡 일산 초대권 이벤트", "req": "2026-08-21", "due": "2026-08-24", "first": "2026-08-26", "requester": "서연", "brand": "행사·공통", "kind": "SNS·이벤트", "done": true, "uploads": 1, "msgs": 7, "guide": 0, "note": ""}, {"name": "찹찹츄 3개이상 구매시 낚시대 증정 배너 수정", "req": "2026-08-21", "due": "2026-08-25", "first": "2026-08-21", "requester": "휘량", "brand": "붐붐포", "kind": "배너", "done": true, "uploads": 1, "msgs": 4, "guide": 1, "note": ""}, {"name": "쿠이시(쿠팡) 생일 가면", "req": "2026-08-21", "due": "2026-08-21", "first": "2026-08-21", "requester": "서연", "brand": "쿠이시", "kind": "썸네일·대표이미지", "done": true, "uploads": 1, "msgs": 1, "guide": 0, "note": ""}, {"name": "쿠이시(쿠팡) 홀로그램 커튼 실버", "req": "2026-08-21", "due": "2026-08-21", "first": "2026-08-21", "requester": "서연", "brand": "쿠이시", "kind": "썸네일·대표이미지", "done": true, "uploads": 1, "msgs": 2, "guide": 0, "note": ""}, {"name": "쿠이시(쿠팡) 포스터세트 옵션 추가 상세, 대표이미지, 서브이미지", "req": "2026-08-21", "due": "2026-08-21", "first": "2026-08-21", "requester": "혜정", "brand": "쿠이시", "kind": "상세페이지", "done": true, "uploads": 2, "msgs": 12, "guide": 1, "note": ""}, {"name": "쿠이시(쿠팡) 보자기 상세페이지 수정, 썸네일", "req": "2026-08-21", "due": "2026-08-21", "first": null, "requester": "혜정", "brand": "쿠이시", "kind": "상세페이지", "done": true, "uploads": 0, "msgs": 11, "guide": 0, "note": ""}, {"name": "쿠이시(쿠팡) 초 상세페이지 및 대표이미지", "req": "2026-08-21", "due": "2026-08-21", "first": "2026-08-21", "requester": "서연", "brand": "쿠이시", "kind": "상세페이지", "done": true, "uploads": 3, "msgs": 5, "guide": 0, "note": ""}, {"name": "블랙 테라코타 금형 ai파일/jpg", "req": "2026-08-24", "due": "2026-08-25", "first": "2026-08-24", "requester": "미연", "brand": "마르티그", "kind": "패키지·인쇄물", "done": true, "uploads": 1, "msgs": 3, "guide": 1, "note": ""}, {"name": "붐붐포 벤토나이트 1+1 썸네일", "req": "2026-08-26", "due": "2026-08-27", "first": "2026-08-27", "requester": "휘량", "brand": "붐붐포", "kind": "썸네일·대표이미지", "done": true, "uploads": 1, "msgs": 3, "guide": 0, "note": ""}, {"name": "야아부르니 패키지", "req": "2026-08-28", "due": "2026-09-11", "first": "2026-09-29", "requester": "본부장님", "brand": "야아부르니", "kind": "패키지·인쇄물", "done": true, "uploads": 1, "msgs": 6, "guide": 4, "note": "사전 설명 필요, 9/29 발주 단계까지 진행"}, {"name": "베트리온 재구매율 배너(피부, 심장, 관절)", "req": "2026-08-31", "due": "2026-09-01", "first": "2026-09-02", "requester": "서연", "brand": "베트리온", "kind": "배너", "done": true, "uploads": 1, "msgs": 6, "guide": 0, "note": "대체 문구 확인 후 진행"}, {"name": "사바나 스마트스토어 궁팡 특가 안내", "req": "2026-08-31", "due": "2026-09-03", "first": "2026-09-02", "requester": "서연", "brand": "사바나", "kind": "공지·팝업·메시지", "done": true, "uploads": 1, "msgs": 5, "guide": 1, "note": ""}, {"name": "룸스프레이 우디 단상자 칼선 이미지", "req": "2026-09-01", "due": "2026-09-03", "first": null, "requester": "미연", "brand": "마르티그", "kind": "패키지·인쇄물", "done": true, "uploads": 0, "msgs": 0, "guide": 1, "note": ""}, {"name": "사바나 궁팡 주문  QR코드", "req": "2026-09-01", "due": "2026-09-02", "first": "2026-09-02", "requester": "서연", "brand": "사바나", "kind": "공지·팝업·메시지", "done": true, "uploads": 1, "msgs": 11, "guide": 0, "note": ""}, {"name": "액막이 명태 ai", "req": "2026-09-01", "due": "2026-09-09", "first": "2026-09-09", "requester": "미연", "brand": "마르티그", "kind": "패키지·인쇄물", "done": true, "uploads": 1, "msgs": 1, "guide": 0, "note": ""}, {"name": "베트리온 덴탈껌 패키지", "req": "2026-09-02", "due": null, "first": null, "requester": "서연", "brand": "베트리온", "kind": "패키지·인쇄물", "done": false, "uploads": 0, "msgs": 4, "guide": 1, "note": ""}, {"name": "9월~10월 마르티그 SNS", "req": "2026-09-02", "due": "2026-10-31", "first": "2026-09-02", "requester": "미연", "brand": "마르티그", "kind": "SNS·이벤트", "done": false, "uploads": 2, "msgs": 2, "guide": 1, "note": ""}, {"name": "마르티그 추석 프로모션 인스타 이미지", "req": "2026-09-02", "due": "2026-09-04", "first": "2026-09-04", "requester": "미연", "brand": "마르티그", "kind": "SNS·이벤트", "done": true, "uploads": 1, "msgs": 2, "guide": 3, "note": ""}, {"name": "사바나 두부모래 패키징 디자인 제작", "req": "2026-09-04", "due": "2026-09-10", "first": "2026-09-18", "requester": "본부장님", "brand": "사바나", "kind": "패키지·인쇄물", "done": true, "uploads": 1, "msgs": 1, "guide": 2, "note": "패키지 칼선 최종본 9/18 전달"}, {"name": "포우팝 2개제품 -> 붐붐포 스마트스토어 배너/상세", "req": "2026-09-09", "due": "2026-09-16", "first": "2026-09-10", "requester": "본부장님", "brand": "포우팝·아로사", "kind": "상세페이지", "done": true, "uploads": 1, "msgs": 12, "guide": 0, "note": ""}, {"name": "아로사&포우팝 썸넬 수정 (광고이미지검수용)", "req": "2026-09-15", "due": "2026-09-15", "first": "2026-09-15", "requester": "혜정", "brand": "포우팝·아로사", "kind": "썸네일·대표이미지", "done": true, "uploads": 1, "msgs": 5, "guide": 0, "note": ""}, {"name": "종로서적 타공판 DP", "req": "2026-09-17", "due": "2026-09-18", "first": "2026-09-28", "requester": "미연", "brand": "오프라인 DP", "kind": "패키지·인쇄물", "done": true, "uploads": 1, "msgs": 3, "guide": 0, "note": "칼선 수령(9/28) 당일 전달"}, {"name": "추석 배송 연휴 팝업(사바나, 붐붐포, 공통)", "req": "2026-09-21", "due": "2026-09-21", "first": "2026-09-21", "requester": "서연", "brand": "행사·공통", "kind": "공지·팝업·메시지", "done": true, "uploads": 1, "msgs": 2, "guide": 0, "note": ""}, {"name": "포우팝/아로사 12개 제품 디자인요청", "req": "2026-09-21", "due": null, "first": null, "requester": "주성", "brand": "포우팝·아로사", "kind": "상세페이지", "done": false, "uploads": 0, "msgs": 1, "guide": 2, "note": ""}, {"name": "포우팝 오뚜기(옵션 추가에 따른 배너/상세 요청)", "req": "2026-09-22", "due": null, "first": "2026-09-29", "requester": "주성", "brand": "포우팝·아로사", "kind": "상세페이지", "done": true, "uploads": 1, "msgs": 2, "guide": 2, "note": ""}, {"name": "풉백 3종 선택 표 (상세페이지 삽입용)", "req": "2026-09-23", "due": null, "first": null, "requester": "휘량", "brand": "붐붐포", "kind": "상세페이지", "done": false, "uploads": 0, "msgs": 2, "guide": 2, "note": ""}, {"name": "찹찹츄 상세페이지 개선", "req": "2026-09-23", "due": null, "first": null, "requester": "휘량", "brand": "붐붐포", "kind": "상세페이지", "done": false, "uploads": 0, "msgs": 6, "guide": 1, "note": ""}, {"name": "붐붐포 벤토나이트 모래 대표이미지", "req": "2026-09-28", "due": "2026-09-29", "first": "2026-09-28", "requester": "서연", "brand": "붐붐포", "kind": "썸네일·대표이미지", "done": true, "uploads": 2, "msgs": 10, "guide": 2, "note": ""}, {"name": "10월 연휴 배송 팝업(사바나,붐붐포,공통)", "req": "2026-09-28", "due": "2026-09-29", "first": "2026-09-29", "requester": "서연", "brand": "행사·공통", "kind": "공지·팝업·메시지", "done": true, "uploads": 1, "msgs": 2, "guide": 0, "note": ""}, {"name": "붐붐포 칫솔(로켓) 상세페이지 수정", "req": "2026-09-28", "due": "2026-09-28", "first": "2026-09-29", "requester": "서연", "brand": "붐붐포", "kind": "상세페이지", "done": true, "uploads": 1, "msgs": 4, "guide": 0, "note": "리스트 등록(9/29) 후 20분 내 전달"}];
+const RC = {"미연":"var(--r-miyeon)","서연":"var(--r-seoyeon)","혜정":"var(--r-hyejeong)","휘량":"var(--r-hwiryang)","본부장님":"var(--r-bonbu)","주성":"var(--r-juseong)"};
+const REQS = ["미연","서연","혜정","휘량","본부장님","주성"];
+const $ = s => document.querySelector(s);
+const D = s => new Date(s+"T00:00:00");
+const days = (a,b) => Math.round((D(b)-D(a))/864e5);
+const md = s => s ? `${+s.slice(5,7)}/${+s.slice(8,10)}` : "—";
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const dot = r => `<span class="who" style="background:${RC[r]}"></span>`;
+
+/* calendar */
+let mode="req", sel=null;
+function byDate(){const m={};ROWS.forEach(r=>{const k=r[mode];if(k&&k<"2026-10-01"&&k>="2026-07-01")(m[k]=m[k]||[]).push(r)});return m}
+function level(n){return n>=5?4:n>=3?3:n>=2?2:1}
+function drawCal(){
+  const m=byDate(); let html="";
+  [[2026,6],[2026,7],[2026,8]].forEach(([y,mo])=>{
+    const first=new Date(y,mo,1), last=new Date(y,mo+1,0).getDate(), off=(first.getDay()+6)%7;
+    html+=`<div class="month"><h3>${mo+1}월</h3><div class="dow" aria-hidden="true">${"월화수목금토일".split("").map(d=>`<span>${d}</span>`).join("")}</div><div class="grid">`;
+    for(let i=0;i<off;i++)html+=`<span class="day out"></span>`;
+    for(let d=1;d<=last;d++){const k=`${y}-${String(mo+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;const n=(m[k]||[]).length;
+      html+= n?`<button type="button" class="day l${level(n)}${sel===k?" sel":""}" data-n="${n}" data-k="${k}" aria-label="${mo+1}월 ${d}일 ${n}건">${d}</button>`:`<span class="day">${d}</span>`}
+    html+=`</div></div>`});
+  $("#months").innerHTML=html;
+  $("#months").querySelectorAll("button.day").forEach(b=>b.onclick=()=>{sel=b.dataset.k;drawCal();drawDay()});
+}
+function drawDay(){
+  const m=byDate(), label={req:"요청",due:"완료요청",first:"전달"}[mode];
+  if(!sel||!m[sel]){
+    const top=Object.entries(m).sort((a,b)=>b[1].length-a[1].length).slice(0,3);
+    $("#daylist").innerHTML=`<h3>${label} 많은 날</h3><ul>${top.map(([k,v])=>`<li><button type="button" class="seg-link" data-k="${k}" style="all:unset;cursor:pointer;font-weight:600">${md(k)} (${"일월화수목금토"[D(k).getDay()]})</button> ${v.length}건<small>${[...new Set(v.map(r=>r.brand))].join(", ")}</small></li>`).join("")}</ul><p class="empty" style="margin-top:12px">캘린더에서 날짜를 누르면 목록이 여기에 나옵니다.</p>`;
+    $("#daylist").querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{sel=b.dataset.k;drawCal();drawDay()});return}
+  const list=m[sel];
+  $("#daylist").innerHTML=`<h3>${md(sel)} ${label} ${list.length}건</h3><ul>${list.map(r=>`<li>${dot(r.requester)}${esc(r.name)}<small>${r.requester} · ${r.brand} · ${r.kind} · 요청 ${md(r.req)} / 완료요청 ${md(r.due)} / 전달 ${md(r.first)}${r.done?"":" · 진행 중"}</small></li>`).join("")}</ul>`;
+}
+document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",x===b));sel=null;drawCal();drawDay()});
+
+/* weekly stacked */
+function drawWeekly(){
+  const wk={};ROWS.forEach(r=>{const d=D(r.req);d.setDate(d.getDate()-((d.getDay()+6)%7));const k=d.toISOString().slice(0,10);wk[k]=wk[k]||{};wk[k][r.requester]=(wk[k][r.requester]||0)+1});
+  // fill missing weeks
+  const keys=[];for(let d=D("2026-07-27");d<=D("2026-09-28");d.setDate(d.getDate()+7)){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),dd=String(d.getDate()).padStart(2,"0");keys.push(`${y}-${m}-${dd}`)}
+  const W=720,H=240,pl=28,pb=34,pt=14,bw=(W-pl)/keys.length, max=16;
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:520px" role="img" aria-label="주별 요청 건수 누적 막대">`;
+  [0,4,8,12,16].forEach(v=>{const y=H-pb-(v/max)*(H-pb-pt);s+=`<line x1="${pl}" x2="${W}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${pl-6}" y="${y+4}" font-size="11" text-anchor="end">${v}</text>`});
+  keys.forEach((k,i)=>{let y=H-pb;const x=pl+i*bw+bw*.2,w=bw*.6;let tot=0;
+    REQS.forEach(r=>{const n=(wk[k]||{})[r]||0;if(!n)return;tot+=n;const h=(n/max)*(H-pb-pt);y-=h;s+=`<rect x="${x}" y="${y}" width="${w}" height="${h-1}" fill="${RC[r]}"><title>${r} ${n}건</title></rect>`});
+    s+=`<text x="${x+w/2}" y="${y-5}" font-size="12" text-anchor="middle" style="fill:var(--ink);font-weight:600">${tot||""}</text><text x="${x+w/2}" y="${H-pb+16}" font-size="11" text-anchor="middle">${md(k)}~</text>`});
+  $("#weekly").innerHTML=s+"</svg>";
+  $("#rkeys").innerHTML=REQS.map(r=>`<span>${dot(r)}${r}</span>`).join("");
+}
+
+/* requester table */
+function drawReq(){
+  const rows=REQS.map(r=>{const L=ROWS.filter(x=>x.requester===r);const lead=L.filter(x=>x.due&&x.due<"2026-10-01").map(x=>days(x.req,x.due));
+    return {r,n:L.length,same:L.filter(x=>x.due===x.req).length,lead:lead.length?(lead.reduce((a,b)=>a+b,0)/lead.length):null,brands:[...new Set(L.map(x=>x.brand))].slice(0,3).join(", ")}});
+  const max=Math.max(...rows.map(x=>x.n));
+  $("#reqtable").innerHTML=`<thead><tr><th>요청자</th><th>건수</th><th class="num">당일 마감</th><th class="num">평균 기간</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${dot(x.r)}${x.r}<small style="display:block;color:var(--muted);font-size:12px">${x.brands}</small></td><td style="width:40%"><div style="display:flex;align-items:center;gap:8px"><span style="height:12px;border-radius:2px;background:${RC[x.r]};width:${x.n/max*100}%"></span><b>${x.n}</b></div></td><td class="num">${x.same}건</td><td class="num">${x.lead==null?"—":x.lead.toFixed(1)+"일"}</td></tr>`).join("")}</tbody>`;
+}
+function bars(el,key){
+  const c={};ROWS.forEach(r=>{c[r[key]]=c[r[key]]||{};c[r[key]][r.requester]=(c[r[key]][r.requester]||0)+1});
+  const e=Object.entries(c).map(([k,v])=>[k,v,Object.values(v).reduce((a,b)=>a+b,0)]).sort((a,b)=>b[2]-a[2]);const max=e[0][2];
+  $(el).innerHTML=e.map(([k,v,t])=>`<div class="bar"><span>${k}</span><div class="track" style="width:${t/max*100}%">${REQS.filter(r=>v[r]).map(r=>`<i title="${r} ${v[r]}건" style="width:${v[r]/t*100}%;background:${RC[r]}"></i>`).join("")}</div><b>${t}</b></div>`).join("");
+}
+function drawTA(){
+  const b=[["당일",0,0],["1일",1,1],["2–3일",2,3],["4–7일",4,7],["8일 이상",8,99]];
+  const L=ROWS.filter(r=>r.first).map(r=>days(r.req,r.first));
+  const c=b.map(([l,a,z])=>[l,L.filter(x=>x>=a&&x<=z).length]);const max=Math.max(...c.map(x=>x[1]));
+  $("#ta").innerHTML=`<div class="bars">${c.map(([l,n])=>`<div class="bar"><span>${l}</span><div class="track" style="width:${n/max*100}%"><i style="width:100%;background:var(--h3)"></i></div><b>${n}</b></div>`).join("")}</div>`;
+}
+function drawLate(){
+  const L=ROWS.filter(r=>r.first&&r.due&&r.first>r.due).sort((a,b)=>days(b.due,b.first)-days(a.due,a.first));
+  $("#late").innerHTML=`<thead><tr><th>요청</th><th>요청자</th><th class="num">요청</th><th class="num">완료요청</th><th class="num">전달</th><th class="num">초과</th><th>경과</th></tr></thead><tbody>${L.map(r=>`<tr><td>${esc(r.name)}</td><td>${dot(r.requester)}${r.requester}</td><td class="num">${md(r.req)}</td><td class="num">${md(r.due)}</td><td class="num">${md(r.first)}</td><td class="num"><span class="tag late">+${days(r.due,r.first)}일</span></td><td style="color:var(--muted)">${esc(r.note||"—")}</td></tr>`).join("")}</tbody>`;
+}
+function drawOpen(){
+  const L=ROWS.filter(r=>!r.done);
+  $("#open").innerHTML=`<thead><tr><th>요청</th><th>요청자</th><th>유형</th><th class="num">요청일</th><th class="num">완료요청일</th><th class="num">경과</th></tr></thead><tbody>${L.map(r=>`<tr><td>${esc(r.name)}</td><td>${dot(r.requester)}${r.requester}</td><td>${r.kind}</td><td class="num">${md(r.req)}</td><td class="num">${r.due?(r.due>"2026-10-01"?"10/31 (상시)":md(r.due)):"미지정"}</td><td class="num">${days(r.req,"2026-09-30")}일</td></tr>`).join("")}</tbody>`;
+}
+let flt="전체";
+function drawAll(){
+  $("#filters").innerHTML=["전체",...REQS].map(r=>`<button type="button" aria-pressed="${r===flt}" data-r="${r}">${r==="전체"?"전체 52":r}</button>`).join("");
+  $("#filters").querySelectorAll("button").forEach(b=>b.onclick=()=>{flt=b.dataset.r;drawAll()});
+  const L=ROWS.filter(r=>flt==="전체"||r.requester===flt);
+  $("#all").innerHTML=`<thead><tr><th>요청</th><th>요청자</th><th>브랜드</th><th>유형</th><th class="num">요청</th><th class="num">완료요청</th><th class="num">전달</th><th>상태</th></tr></thead><tbody>${L.map(r=>{const late=r.first&&r.due&&r.first>r.due;return `<tr><td>${esc(r.name)}</td><td style="white-space:nowrap">${dot(r.requester)}${r.requester}</td><td style="white-space:nowrap">${r.brand}</td><td style="white-space:nowrap">${r.kind}</td><td class="num">${md(r.req)}</td><td class="num">${r.due&&r.due>"2026-10-01"?"10/31":md(r.due)}</td><td class="num">${md(r.first)}</td><td>${!r.done?'<span class="tag open">진행 중</span>':late?'<span class="tag late">지연</span>':'<span class="tag">완료</span>'}</td></tr>`}).join("")}</tbody>`;
+}
+drawCal();drawDay();drawWeekly();drawReq();bars("#brands","brand");bars("#kinds","kind");drawTA();drawLate();drawOpen();drawAll();
+</script>
+</body>
+</html>
