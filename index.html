@@ -227,7 +227,7 @@ document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{mode=b.datase
 
 /* weekly stacked */
 function drawWeekly(){
-  const wk={};ROWS.forEach(r=>{const d=D(r.req);d.setDate(d.getDate()-((d.getDay()+6)%7));const k=d.toISOString().slice(0,10);wk[k]=wk[k]||{};wk[k][r.requester]=(wk[k][r.requester]||0)+1});
+  const wk={};ROWS.forEach(r=>{const d=D(r.req);d.setDate(d.getDate()-((d.getDay()+6)%7));const k=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;wk[k]=wk[k]||{};wk[k][r.requester]=(wk[k][r.requester]||0)+1});
   // fill missing weeks
   const keys=[];for(let d=D("2026-07-27");d<=D("2026-09-28");d.setDate(d.getDate()+7)){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),dd=String(d.getDate()).padStart(2,"0");keys.push(`${y}-${m}-${dd}`)}
   const W=720,H=240,pl=28,pb=34,pt=14,bw=(W-pl)/keys.length, max=16;
